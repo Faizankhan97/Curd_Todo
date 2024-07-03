@@ -1,11 +1,20 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 
 function App() {
   const [input, setInput] = useState("");
-  const [list, setList] = useState([]);
   const [isUpdate, setIsUpdate] = useState(false);
   const [updatedValue, setUpdatedValue] = useState()
+  const [list, setList] = useState(() => {
+    const storageList = localStorage.getItem("list")
+    return storageList ? JSON.parse(storageList) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem("list", JSON.stringify(list))
+    console.log(list, "list")
+  }, [list])
+
 
   const handleInput = (e) => {
     setInput(e.target.value)
@@ -17,8 +26,7 @@ function App() {
   }
 
   const handleDelete = (id) => {
-    setList(list.filter((item) => item.id != id))
-    console.log(id, "id")
+    setList(list.filter((item) => item?.id != id))
   }
 
   const handleUpdate = (newValue) => {
@@ -29,7 +37,7 @@ function App() {
 
   const handleUpdateFunc = () => {
     setList(list?.map((item) => {
-      if(item.id == updatedValue.id){
+      if(item?.id == updatedValue?.id){
         return {...item, input: input}
       }
       return item;
@@ -46,7 +54,7 @@ function App() {
         <ul>
           {
             list?.map((item) => (
-              <li key={item.id}>{item.input} <button onClick={() => handleDelete(item.id)}>Trash</button> <button onClick={() => handleUpdate(item)}>Update</button></li>
+              <li key={item?.id}>{item?.input} <button onClick={() => handleDelete(item?.id)}>Delete</button> <button onClick={() => handleUpdate(item)}>Update</button></li>
             ))
           }
         </ul>
