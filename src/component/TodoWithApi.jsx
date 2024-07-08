@@ -48,11 +48,12 @@ const TodoWithApi = () => {
   const searchFilter = isData?.filter((item) => item?.name?.toLowerCase()?.includes(isSearch?.toLowerCase())) 
 
   useEffect(() => {
-    fetchData();
-  }, [])
+    localStorage.setItem("isData", JSON.stringify(isData))
+    console.log(isData, "isData")
+  }, [isData])
 
   useEffect(() => {
-    localStorage.setItem("isData", JSON.stringify(isData))
+    fetchData();
   }, [])
   
 
